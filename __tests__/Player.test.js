@@ -3,20 +3,26 @@ const Potion = require('../lib/Potion');
 
 jest.mock('../lib/Potion')
 
-test('gets player stats as an object', () => {
+test('checks if player is alive or not', () => {
     const player = new Player('Dave');
 
-    expect(player.getStats()).toHaveProperty('potions');
-    expect(player.getStats()).toHaveProperty('health');
-    expect(player.getStats()).toHaveProperty('strength');
-    expect(player.getStats()).toHaveProperty('agility');
-});
-test('gets inventory from player or returns false', () => {
+    expect(player.isAlive()).toBeTruthy();
+
+    player.health = 0;
+
+    expect(player.isAlive()).toBeFalsy();
+})
+
+test('subtracts from players health', () => {
     const player = new Player('Dave');
+    const oldHealth = player.health;
 
-    expect(player.getInventory()).toEqual(expect.any(Array));
+    player.reduceHealth(5);
 
-    player.inventory = [];
-  
-    expect(player.getInventory()).toEqual(false);
+    expect(player.health).toBe(oldHealth - 5);
+
+    player.reduceHealth(99999);
+
+    expect(player.health).toBe(0);
+
 })
